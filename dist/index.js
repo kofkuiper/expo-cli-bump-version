@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.versioner = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const appJsonPath = path_1.default.join(__dirname, '/app.json');
@@ -51,3 +52,22 @@ updateJsonFile(packageJsonPath, (packageJson) => {
     // Increment package.json version
     packageJson.version = incrementVersion(packageJson.version);
 });
+const versioner = () => {
+    updateJsonFile(packageJsonPath, (packageJson) => {
+        // Increment package.json version
+        packageJson.version = incrementVersion(packageJson.version);
+    });
+    updateJsonFile(appJsonPath, (appJson) => {
+        // Increment expo.version
+        appJson.expo.version = incrementVersion(appJson.expo.version);
+        // Increment expo.ios.buildNumber
+        if (appJson.expo.ios && appJson.expo.ios.buildNumber) {
+            appJson.expo.ios.buildNumber = incrementBuildNumber(appJson.expo.ios.buildNumber);
+        }
+        // Increment android.versionCode
+        if (appJson.expo.android && appJson.expo.android.versionCode) {
+            appJson.expo.android.versionCode = incrementVersionCode(appJson.expo.android.versionCode);
+        }
+    });
+};
+exports.versioner = versioner;

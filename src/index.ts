@@ -73,3 +73,29 @@ updateJsonFile(packageJsonPath, (packageJson: PackageJson) => {
     // Increment package.json version
     packageJson.version = incrementVersion(packageJson.version)
 })
+
+export const versioner = () => {
+    updateJsonFile(packageJsonPath, (packageJson: PackageJson) => {
+        // Increment package.json version
+        packageJson.version = incrementVersion(packageJson.version)
+    })
+
+    updateJsonFile(appJsonPath, (appJson: ExpoAppJson) => {
+        // Increment expo.version
+        appJson.expo.version = incrementVersion(appJson.expo.version)
+
+        // Increment expo.ios.buildNumber
+        if (appJson.expo.ios && appJson.expo.ios.buildNumber) {
+            appJson.expo.ios.buildNumber = incrementBuildNumber(
+                appJson.expo.ios.buildNumber
+            )
+        }
+
+        // Increment android.versionCode
+        if (appJson.expo.android && appJson.expo.android.versionCode) {
+            appJson.expo.android.versionCode = incrementVersionCode(
+                appJson.expo.android.versionCode
+            )
+        }
+    })
+}
